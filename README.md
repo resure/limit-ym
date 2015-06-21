@@ -1,5 +1,7 @@
-limit.js
+limit-ym
 ========
+
+`limit.js` lib wrapped to [YModules](https://github.com/ymaps/modules) async modular system.
 
 limit.js serves to solve a simple problem, too many events. Sometimes you want to track browser resizing, or mouse movements but you don't need/want every single event (of which there can be thousands). This is where limit.js can help.
 
@@ -29,5 +31,5 @@ A functioning example can be found here: http://jsfiddle.net/CkNxa/
 
 # Install with Bower
 ```sh
-bower install limit
+bower install limit-ym
 ```
