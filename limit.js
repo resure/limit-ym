@@ -1,56 +1,58 @@
-/**
- * debounce
- * @param {integer} milliseconds This param indicates the number of milliseconds
- *     to wait after the last call before calling the original function.
- * @param {object} What "this" refers to in the returned function.
- * @return {function} This returns a function that when called will wait the
- *     indicated number of milliseconds after the last call before
- *     calling the original function.
- */
-Function.prototype.debounce = function (milliseconds, context) {
-    var baseFunction = this,
-        timer = null,
-        wait = milliseconds;
 
-    return function () {
-        var self = context || this,
-            args = arguments;
+modules.define('debounce', function (provide) {
+    /**
+     * debounce
+     * @param {integer} milliseconds This param indicates the number of milliseconds
+     *     to wait after the last call before calling the original function .
+     * @return {function} This returns a function that when called will wait the
+     *     indicated number of milliseconds after the last call before
+     *     calling the original function.
+     */
+    provide(function (fn, milliseconds) {
+        var timer = null,
+            wait = milliseconds;
 
-        function complete() {
-            baseFunction.apply(self, args);
-            timer = null;
-        }
+        return function () {
+            var self = this,
+                args = arguments;
 
-        if (timer) {
-            clearTimeout(timer);
-        }
+            function complete() {
+                fn.apply(self, args);
+                timer = null;
+            }
 
-        timer = setTimeout(complete, wait);
-    };
-};
+            if (timer) {
+                clearTimeout(timer);
+            }
 
-/**
-* throttle
-* @param {integer} milliseconds This param indicates the number of milliseconds
-*     to wait between calls before calling the original function.
-* @param {object} What "this" refers to in the returned function.
-* @return {function} This returns a function that when called will wait the
-*     indicated number of milliseconds between calls before
-*     calling the original function.
-*/
-Function.prototype.throttle = function (milliseconds, context) {
-    var baseFunction = this,
-        lastEventTimestamp = null,
-        limit = milliseconds;
+            timer = setTimeout(complete, wait);
+        };
+    });
+});
 
-    return function () {
-        var self = context || this,
-            args = arguments,
-            now = Date.now();
+modules.define('throttle', function (provide) {
+    /**
+     * throttle
+     * @param {integer} milliseconds This param indicates the number of milliseconds
+     *     to wait between calls before calling the original function.
+     * @return {function} This returns a function that when called will wait the
+     *     indicated number of milliseconds between calls before
+     *     calling the original function.
+     */
+    provide(function (fn, milliseconds) {
+        var lastEventTimestamp = null,
+            limit = milliseconds;
 
-        if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
-            lastEventTimestamp = now;
-            baseFunction.apply(self, args);
-        }
-    };
-};
+        return function () {
+            var self = this,
+                args = arguments,
+                now = Date.now();
+
+            if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
+                lastEventTimestamp = now;
+                fn.apply(self, args);
+            }
+        };
+    });
+
+});
